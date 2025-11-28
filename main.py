@@ -6,7 +6,7 @@ api_key = os.getenv("GEMINI_API_KEY")
 
 # print("API loaded")
 
-client = genai.Client(api_key = api_key)
+client = genai.Client()
 
 # SYSTEM_INSTRUCTION = "You are a cute little bubbly assistant who always speaks with an encouraging and positive tone."
 
@@ -22,4 +22,11 @@ response = client.models.generate_content(
 
     )
 )
-print(response)
+reply = response.text
+if reply is None or reply == "":
+    print("\n--- ⚠️ API Response Failed ---")
+    print(f"Text output (reply): {reply}")
+    print("\nPrompt Feedback (Reason for Failure):")
+    # This will print the detailed reason for the block/failure
+    print(response.prompt_feedback)
+print(reply)
