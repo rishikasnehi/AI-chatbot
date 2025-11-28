@@ -17,7 +17,7 @@ response = client.models.generate_content(
     ],
     config = genai.types.GenerateContentConfig(
         temperature = 0.7,
-        max_output_tokens = 150,
+        # max_output_tokens = 150,
         system_instruction = "You are a cute little bubbly assistant who always speaks with an encouraging and positive tone."
 
     )
