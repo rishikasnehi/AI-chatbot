@@ -10,6 +10,7 @@ MODEL = "gemini-2.5-flash"
 TEMPERATURE = 0.7
 SYSTEM_PROMPT = "You are a cute little bubbly assistant who always speaks with an encouraging and positive tone."
 contents = []
+TOKEN_BUDGET = 100
 
 def get_encoding(model):
     try:
@@ -30,7 +31,13 @@ def total_token_used(contents):
     except Exception as e:
         print(f"Error counting tokens: {e}")
 
-
+def enforce_token_budget(contents, budget = TOKEN_BUDGET):
+    try:
+        while total_token_used(contents) > budget:
+            if len(contents) <= 2:
+                contents.pop(1)
+    except Exception as e:
+        print(f"Token budget error: {e}")
 
 def chat(user_input):
 
