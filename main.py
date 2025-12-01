@@ -18,6 +18,18 @@ def get_encoding(model):
         print(f"Warning: Tokenizer for model {model} not found. Using cl100k_base encoding.")
         return tiktoken.get_encoding("cl100k_base")
     
+ENCODING = get_encoding(MODEL)
+
+def count_tokens(text):
+    tokens = ENCODING.encode(text)
+    return len(tokens)
+
+def total_token_used(contents):
+    try:
+        return sum(count_tokens(part["text"]) for message in contents for part in message["parts"] if "text" in part)
+    except Exception as e:
+        print(f"Error counting tokens: {e}")
+
 
 
 def chat(user_input):
