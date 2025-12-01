@@ -1,6 +1,6 @@
 import os
 from google import genai
-
+import tiktoken
 
 api_key = os.getenv("GEMINI_API_KEY")
 # print("API loaded")
@@ -10,6 +10,15 @@ MODEL = "gemini-2.5-flash"
 TEMPERATURE = 0.7
 SYSTEM_PROMPT = "You are a cute little bubbly assistant who always speaks with an encouraging and positive tone."
 contents = []
+
+def get_encoding(model):
+    try:
+        return tiktoken.encoding_for_model(model)
+    except KeyError:
+        print(f"Warning: Tokenizer for model {model} not found. Using cl100k_base encoding.")
+        return tiktoken.get_encoding("cl100k_base")
+    
+
 
 def chat(user_input):
 
