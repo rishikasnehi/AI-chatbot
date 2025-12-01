@@ -3,7 +3,7 @@ from google import genai
 
 
 api_key = os.getenv("GEMINI_API_KEY")
-print("API loaded")
+# print("API loaded")
 
 client = genai.Client()
 MODEL = "gemini-2.5-flash"
@@ -34,8 +34,14 @@ def chat(user_input):
         # This will print the detailed reason for the block/failure
         print(response.prompt_feedback)
 
-    contents.append({"role" : "assistant", "parts" : [{"text" : reply}]})
-    
+    contents.append({"role" : "model", "parts" : [{"text" : reply}]})
+
     return reply    
 
-print(chat("Hello, how are you today?"))
+while True:
+    user_input = input("You: ")
+    if user_input.strip().lower() in {"exit", "quit"}:
+        break
+    reply = chat(user_input)
+    print("You:" + user_input)
+    print("Assistant:" + reply)    
