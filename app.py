@@ -92,8 +92,14 @@ if prompt:
         with st.chat_message("assistant"):
             full_response = st.write_stream(response_stream)
 
-        st.session_state['history'].append({"role": "model", "parts": [{"text": full_response}]})
-
+        if full_response:
+            st.session_state['history'].append({"role": "model", "parts": [{"text": full_response}]})
+        else:
+            # If no response was received (e.g., blocked), remove the user message
+            if st.session_state['history'] and st.session_state['history'][-1]["role"] == "user":
+                st.session_state['history'].pop()
+                st.warning("Assistant response was empty or blocked. Try rephrasing your message.")
+                
     except APIError as e:
         st.error(f"API Error: Could not connect or authenticate. Details: {e}")
         # Remove the user message from history on failure
