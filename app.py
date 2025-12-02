@@ -15,6 +15,10 @@ from main import (
 st.set_page_config(page_title = "Chatbot", page_icon = "🤖", layout = "wide")
 st.title("💖 Bubbly Gemini Chatbot")
 
+if "GEMINI_API_KEY" not in os.environ:
+    st.error("Error: GEMINI_API_KEY environment variable not found. Please set it.")
+    st.stop()
+
 if 'history' not in st.session_state:
     st.session_state['history'] = []
 if 'system_prompt' not in st.session_state:
