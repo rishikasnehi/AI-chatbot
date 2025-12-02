@@ -53,6 +53,8 @@ def chat(user_input):
         )
     )
 
+    enforce_token_budget(contents)
+
     reply = response.text
 
     if reply is None or reply == "":
@@ -73,3 +75,4 @@ while True:
     reply = chat(user_input)
     print("You:" + user_input)
     print("Assistant:" + reply)    
+    print("Current token :", total_token_used(contents))
