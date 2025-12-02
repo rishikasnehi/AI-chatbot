@@ -56,3 +56,19 @@ with st.sidebar:
         st.session_state['history'] = []
         st.toast("Chat history cleared!")
         st.experimental_rerun()
+
+# Multimodal Chat (Vision) - File Uploader
+uploaded_file = st.file_uploader("🖼️ Upload an Image for Vision", type = ['png', 'jpg', 'jpeg'], key = "file_uploader")
+
+# Display previous messages
+for message in st.session_state['history']:
+    role = "user" if message["role"] == "user" else "assistant"
+    with st.chat_message(role):
+        for part in message["parts"]:
+            if "text" in part:
+                st.markdown(part["text"])
+            elif "inline_data" in part:
+                # Display uploaded image if it was saved in history
+                image_data = part["inline_data"]["data"]
+                image = Image.open(BytesIO(image_data))
+                st.image(image, caption="Image Sent by User", width=200)
