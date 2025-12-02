@@ -99,3 +99,8 @@ if prompt:
         # Remove the user message from history on failure
         if st.session_state['history'] and st.session_state['history'][-1]["role"] == "user":
             st.session_state['history'].pop()
+
+    # Clear the file uploader after processing the image
+    if uploaded_file:
+        st.session_state.file_uploader = None
+        st.experimental_rerun()
