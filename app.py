@@ -71,4 +71,31 @@ for message in st.session_state['history']:
                 # Display uploaded image if it was saved in history
                 image_data = part["inline_data"]["data"]
                 image = Image.open(BytesIO(image_data))
-                st.image(image, caption="Image Sent by User", width=200)
+                st.image(image, caption = "Image Sent by User", width = 200)
+
+# User Input
+prompt = st.chat_input("Ask your bubbly assistant anything...")
+
+if prompt:
+
+    try:
+        response_stream = chat(
+            contents = st.session_state['history'],
+            user_input = prompt,
+            uploaded_file_data = uploaded_file,
+            temperature = temperature,
+            system_prompt = st.session_state['system_prompt'],
+            budget = st.session_state['token_budget']
+        )
+
+        full_response = ""
+        with st.chat_message("assistant"):
+            full_response = st.write_stream(response_stream)
+
+        st.session_state['history'].append({"role": "model", "parts": [{"text": full_response}]})
+
+    except APIError as e:
+        st.error(f"API Error: Could not connect or authenticate. Details: {e}")
+        # Remove the user message from history on failure
+        if st.session_state['history'] and st.session_state['history'][-1]["role"] == "user":
+            st.session_state['history'].pop()
