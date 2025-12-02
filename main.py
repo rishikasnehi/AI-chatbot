@@ -31,13 +31,20 @@ def total_token_used(contents):
     except Exception as e:
         print(f"Error counting tokens: {e}")
 
-def enforce_token_budget(contents, budget = TOKEN_BUDGET):
-    try:
-        while total_token_used(contents) > budget:
-            if len(contents) <= 2:
-                contents.pop(1)
-    except Exception as e:
-        print(f"Token budget error: {e}")
+# def enforce_token_budget(contents, budget = TOKEN_BUDGET):
+#     try:
+#         while total_token_used(contents) > budget:
+#             if len(contents) <= 2:
+#                 contents.pop(1)
+#     except Exception as e:
+#         print(f"Token budget error: {e}")
+
+def enforce_token_budget(contents, budget=TOKEN_BUDGET):
+    while total_token_used(contents) > budget and len(contents) >= 2:
+        print(f"[INFO: Token budget exceeded ({total_token_used(contents)} > {budget}). Trimming history.]")
+        contents.pop(0)
+        if len(contents) >= 1:
+            contents.pop(0)
 
 def chat(user_input):
 
