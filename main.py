@@ -24,15 +24,24 @@ def get_encoding(model):
 ENCODING = get_encoding(MODEL)
 
 def count_tokens(text):
+    if not isinstance(text, str):
+        # Return 0 if input is not a string
+        return 0
     tokens = ENCODING.encode(text)
     return len(tokens)
 
 def total_token_used(contents):
     try:
-        return sum(count_tokens(part["text"]) for message in contents for part in message["parts"] if "text" in part)
+        return sum(
+            count_tokens(part["text"]) 
+            for message in contents 
+            for part in message["parts"] 
+            if "text" in part
+        )
     except Exception as e:
         print(f"Error counting tokens: {e}")
-
+        return 0
+    
 # def enforce_token_budget(contents, budget = TOKEN_BUDGET):
 #     try:
 #         while total_token_used(contents) > budget:
